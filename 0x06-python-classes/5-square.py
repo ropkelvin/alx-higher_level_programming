@@ -29,11 +29,14 @@ class Square:
         Setter method to set the size of the square.
         Args:
             value (int): The new size value to set
+        If size is 0, prints a newline.
         '''
         if not isinstance(value, int):
             raise TypeError("size must be an integer")
         if value < 0:
             raise ValueError("size must be >= 0")
+        if value == 0:
+            print('\n')
         self.__size = value
 
     def area(self):
@@ -52,12 +55,10 @@ class Square:
         """
         Print a square pattern based on the size attribute.
 
-        If size is 0, prints a newline.
         If size is greater than 0,
         prints a square pattern of '#' based on the size.
         """
-        if self.__size == 0:
-            print('\n')
+
         if self.__size > 0:
             for i in range(self.__size):
                 print('#' * self.__size)
