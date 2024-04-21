@@ -149,12 +149,14 @@ class Base:
         filename = cls.__name__ + ".csv"
 
         with open(filename, 'w', newline='') as csvfile:
-            if list_objs is not None:
-                writer = csv.writer(csvfile)
+            writer = csv.writer(csvfile)
+            if list_objs is None or len(list_objs) == 0:
+                csvfile.write("[]")
+            else:
                 for obj in list_objs:
                     if cls.__name__ == "Rectangle":
                         writer.writerow([obj.id, obj.width, obj.height,
-                                         obj.x, obj.y])
+                                        obj.x, obj.y])
                     elif cls.__name__ == "Square":
                         writer.writerow([obj.id, obj.size, obj.x, obj.y])
 
@@ -167,7 +169,7 @@ class Base:
         If the file does not exist, return an empty list
         Otherwise, return a list of instances
         -the type of these instances depends on cls
-                    (current class using this method)
+                        (current class using this method)
 
         Returns:
             list: A list of instances.
@@ -188,7 +190,9 @@ class Base:
                                       "x": int(row[2]), "y": int(row[3])}
                     list_objs.append(cls.create(**dictionary))
         except FileNotFoundError:
-            pass
+            return list_objs
+
+        return list_objs
 
     @staticmethod
     def draw(list_rectangles, list_squares):
