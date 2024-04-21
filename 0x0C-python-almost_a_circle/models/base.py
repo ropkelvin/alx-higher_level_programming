@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 """Defines a base model class."""
 import json
+import csv
+import turtle
+import random
 
 
 class Base:
@@ -133,3 +136,96 @@ class Base:
             return []
 
         return [cls.create(**dict_) for dict_ in list_dicts]
+
+    @classmethod
+    def save_to_file_csv(cls, list_objs):
+        """
+        Writes the CSV string representation of list_objs to a file.
+
+        Args:
+            list_objs (list): A list of instances that inherits from Base.
+                    Example: list of Rectangle or list of Square instances.
+        """
+        filename = cls.__name__ + ".csv"
+
+        with open(filename, 'w', newline='') as csvfile:
+            if list_objs is not None:
+                writer = csv.writer(csvfile)
+                for obj in list_objs:
+                    if cls.__name__ == "Rectangle":
+                        writer.writerow([obj.id, obj.width, obj.height,
+                                         obj.x, obj.y])
+                    elif cls.__name__ == "Square":
+                        writer.writerow([obj.id, obj.size, obj.x, obj.y])
+
+    @classmethod
+    def load_from_file_csv(cls):
+        """
+        Returns a list of instances from a CSV file.
+
+        The filename must be: <Class name>.csv - example: Rectangle.csv
+        If the file does not exist, return an empty list
+        Otherwise, return a list of instances
+        -the type of these instances depends on cls
+                    (current class using this method)
+
+        Returns:
+            list: A list of instances.
+        """
+        filename = cls.__name__ + ".csv"
+        list_objs = []
+
+        try:
+            with open(filename, 'r') as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    if cls.__name__ == "Rectangle":
+                        dictionary = {"id": int(row[0]), "width": int(row[1]),
+                                      "height": int(row[2]),
+                                      "x": int(row[3]), "y": int(row[4])}
+                    elif cls.__name__ == "Square":
+                        dictionary = {"id": int(row[0]), "size": int(row[1]),
+                                      "x": int(row[2]), "y": int(row[3])}
+                    list_objs.append(cls.create(**dictionary))
+        except FileNotFoundError:
+            pass
+
+    @staticmethod
+    def draw(list_rectangles, list_squares):
+        """
+        Opens a window and draws all the Rectangles and Squares.
+
+        Args:
+            list_rectangles (list): A list of Rectangle instances.
+            list_squares (list): A list of Square instances.
+        """
+        screen = turtle.Screen()
+        screen.bgcolor("black")
+
+        t = turtle.Turtle()
+
+        colors = ["red", "green", "blue", "orange", "purple",
+                  "brown", "yellow"]
+
+        for rectangle in list_rectangles:
+            t.penup()
+            t.goto(rectangle.x, rectangle.y)
+            t.pendown()
+            t.color(random.choice(colors))
+            for _ in range(2):
+                t.forward(rectangle.width)
+                t.right(90)
+                t.forward(rectangle.height)
+                t.right(90)
+
+        for square in list_squares:
+            t.penup()
+            t.goto(square.x, square.y)
+            t.pendown()
+            t.color(random.choice(colors))
+            for _ in range(4):
+                t.forward(square.size)
+                t.right(90)
+
+        t.hideturtle()
+        turtle.done()
