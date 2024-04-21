@@ -36,7 +36,7 @@ class Square(Rectangle):
         int: The size of the square (width and height are equal).
         """
         return self.width
-        
+
     @size.setter
     def size(self, value):
         """
@@ -48,7 +48,6 @@ class Square(Rectangle):
         self.width = value
         self.height = value
 
-
     def __str__(self):
         """
         Returns a string representation of the Square object.
@@ -58,4 +57,34 @@ class Square(Rectangle):
                 "[Square] (<id>) <x>/<y> - <size>".
         """
         return "[Square] ({}) {}/{} - {}"\
-               .format(self.id, self.x, self.y, self.width)   
+               .format(self.id, self.x, self.y, self.width)
+
+    def update(self, *args, **kwargs):
+        """
+        Updates the attributes of the Square object.
+
+        Args:
+            *args: A variable-length list of arguments.
+            The order of the arguments should be: id, size, x, y.
+            **kwargs: A dictionary where each key
+            represents an attribute name and
+            each value represents the new value for that attribute.
+        """
+        attributes = ['id', 'size', 'x', 'y']
+
+        if args:
+            for i, arg in enumerate(args):
+                if i < len(attributes):
+                    if attributes[i] == 'size':
+                        self.width = arg
+                        self.height = arg
+                    else:
+                        setattr(self, attributes[i], arg)
+
+        else:
+            for key, value in kwargs.items():
+                if key == 'size':
+                    self.width = value
+                    self.height = value
+                elif key in attributes:
+                    setattr(self, key, value)
