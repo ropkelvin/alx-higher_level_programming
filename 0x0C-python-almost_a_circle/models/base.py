@@ -68,3 +68,20 @@ class Base:
 
         with open(cls.__name__ + ".json", 'w') as file:
             file.write(json_string)
+
+    @staticmethod
+    def from_json_string(json_string):
+        """
+        Returns the list represented by the JSON string json_string.
+
+        Args:
+            json_string (str): A string representing a list of dictionaries.
+
+        Returns:
+            list: If json_string is None or empty, return an empty list.
+                Otherwise, return the list represented by json_string.
+        """
+        if json_string is None:
+            return []
+        else:
+            return json.loads(json_string)
