@@ -98,17 +98,17 @@ class Rectangle(Base):
 
     def display(self):
         """
-        Prints a rectangle of '#' characters.
+        Prints a rectangle of '#' characters at position (x, y).
 
         The dimensions of the rectangle are determined by:
         -the `self.__height` and `self.__width` attributes of the object.
         The rectangle is printed to the standard output,
         with each row of '#' characters printed on a new line.
         """
-        for x in range(self.__height):
-            for y in range(self.__width):
-                print('#', end='')
-            print()
+        print('\n' * self.y, end='')  # Add newlines for the y position
+        for _ in range(self.height):
+            print(' ' * self.x, end='')  # Add spaces for the x position
+            print('#' * self.width)
 
     def __str__(self):
         """
